@@ -22,6 +22,7 @@ Route::prefix('v1')->group( function()
     Route::post('register-employee', [AuthController::class , 'register_employee']);
     Route::post('register-supervisor', [AuthController::class , 'register_supervisor']);
     Route::post('login', [AuthController::class , 'login']);
+    // supervisor
     Route::middleware((['auth:api' , 'role:supervisor']))->group(function(){
 
         // project 
@@ -34,10 +35,11 @@ Route::prefix('v1')->group( function()
         Route::post('create-task', [TasksController::class , 'create']);
         Route::post('view-task', [TasksController::class , 'view']);
         Route::post('update-task', [TasksController::class , 'update']);
+        Route::post('delete-task', [TasksController::class , 'delete']);
 
     });
-
-    Route::middleware((['auth:api' , 'role:employee|supervisor']))->group(function(){
+        // employee
+    Route::middleware((['auth:api' , 'role:employee']))->group(function(){
 
         Route::post('view-task', [TasksController::class , 'view']);
         Route::post('submit-task', [TasksController::class , 'submit']);
