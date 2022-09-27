@@ -15,14 +15,14 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roles = [
-            'Supervisor' ,
+            'supervisor' ,
             'employee'
 
         ];
 
         foreach ($roles as $role) {
             # code...
-            Role::create(['name' => $role , 'guard_name' => 'token']);
+            Role::create(['name' => $role , 'guard_name' => 'api']);
 
         }
     }

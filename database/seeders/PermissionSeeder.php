@@ -26,13 +26,14 @@ class PermissionSeeder extends Seeder
             'crerate-task' ,
             'view-task' ,
             'update-task' ,
+            
 
 
         ];
 
         foreach ($permissions as $permission) {
             # code...
-            Permission::create(['name' => $permission , 'guard_name' => 'token']);
+            Permission::create(['name' => $permission , 'guard_name' => 'api']);
 
         }
     }

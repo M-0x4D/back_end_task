@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    function register(Request $request)
+    function register_employee(Request $request)
     {
 
         $validator = validator()->make($request->all() , [
@@ -41,12 +41,57 @@ class AuthController extends Controller
             ];
             $user = NewUser::create($credentials);
             
-           // $user->client_role()->attach(4 , ['model_type' => 'normal_user' , 'model_id' => $client->id]);
+           // $user->user_role()->attach(2 , ['model_type' => 'employee' , 'model_id' => $user->id]);
+           $user->assignRole('employee');
+            $user->save();
             return $user;
                 
             }
 
     }
+
+
+    function register_supervisor(Request $request)
+    {
+
+        $validator = validator()->make($request->all() , [
+            'name' => 'required',
+            'email' => ['required' , 'unique:new_users'],
+            'password' => 'required',
+        ]);
+
+       
+
+        if ($validator->fails()) {
+            # code...
+             return response()->json("validation error");
+        }
+
+        else {
+               
+            $password = Hash::make($request->password);
+            $api_token = Str::random(60);
+            $credentials = [
+                'name' => $request->name , 
+                'email' => $request->email , 
+                'password' => $password , 
+                'api_token' => $api_token
+            ];
+            $user = NewUser::create($credentials);
+            
+            //$user->user_role()->attach(3 , ['model_type' => 'supervisor' , 'model_id' => $user->id]);
+           $user->assignRole('supervisor');
+            $user->save();
+            return $user;
+
+            }
+    }
+
+
+
+
+
+
 
     function login(Request $request)
     {

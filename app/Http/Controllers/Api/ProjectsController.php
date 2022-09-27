@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
 {
-    function create()
+    function create(Request $request)
     {
+        return $request;
+        
 
     }
 
@@ -24,6 +26,6 @@ class ProjectsController extends Controller
 
     function delete()
     {
-        
+
     }
 }

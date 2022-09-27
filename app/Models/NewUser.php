@@ -3,9 +3,14 @@
 namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
-class NewUser extends Model 
+class NewUser extends Authenticatable 
 {
+    use HasRoles;
+
+    public $guard_name = 'api';
 
     protected $table = 'new_users';
     public $timestamps = true;
@@ -29,7 +34,7 @@ class NewUser extends Model
 
     public function user_role()
 {
-    return $this->belongsToMany('App\models\Role');
+    return $this->belongsToMany('App\models\Role' , 'model_has_roles' , 'model_id');
 }
 
 

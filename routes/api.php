@@ -19,9 +19,10 @@ use App\Http\Controllers\Api\TasksController;
 
 Route::prefix('v1')->group( function()
 {
-    Route::post('register', [AuthController::class , 'register']);
+    Route::post('register-employee', [AuthController::class , 'register_employee']);
+    Route::post('register-supervisor', [AuthController::class , 'register_supervisor']);
     Route::post('login', [AuthController::class , 'login']);
-    Route::middleware((['auth:api' , 'role:Supervisor']))->group(function(){
+    Route::middleware((['auth:api' , 'role:supervisor']))->group(function(){
 
         // project 
         Route::post('create-project', [ProjectsController::class , 'create']);
@@ -36,7 +37,7 @@ Route::prefix('v1')->group( function()
 
     });
 
-    Route::middleware((['auth:api' , 'role:employee|Supervisor']))->group(function(){
+    Route::middleware((['auth:api' , 'role:employee|supervisor']))->group(function(){
 
         Route::post('view-task', [TasksController::class , 'view']);
         Route::post('submit-task', [TasksController::class , 'submit']);
