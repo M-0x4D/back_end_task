@@ -29,11 +29,10 @@ class ProjectsController extends Controller
 
     function update(Request $request)
     {
-        $project = Project::find($request->project_id);
-        $project->update([
-            'name' => $request->name , 
-            'user_id' => auth()->guard('api')->user()->id ,
-            'details' => $request->details
+       
+        $project = Project::where('id' , $request->project_id)->update([
+
+            'name' => $request->name
         ]);
         return $project;
 

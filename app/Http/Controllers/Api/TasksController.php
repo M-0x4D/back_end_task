@@ -31,13 +31,11 @@ class TasksController extends Controller
     function update(Request $request)
     {
 
-        $project = Project::find($request->project_id);
-        $project->update([
-            'name' => $request->name , 
-            'user_id' => auth()->guard('api')->user()->id ,
-            'details' => $request->details
+        $task = Task::where('id' , $request->task_id)->update([
+
+            'name' => $request->name
         ]);
-        return $project;
+        return $task;
     }
 
     function delete(Request $request)
