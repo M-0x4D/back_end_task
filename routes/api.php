@@ -22,6 +22,7 @@ Route::prefix('v1')->group( function()
     Route::post('register-employee', [AuthController::class , 'register_employee']);
     Route::post('register-supervisor', [AuthController::class , 'register_supervisor']);
     Route::post('login', [AuthController::class , 'login']);
+    Route::post('logout', [AuthController::class , 'logout']);
     // supervisor
     Route::middleware((['auth:api' , 'role:supervisor']))->group(function(){
 

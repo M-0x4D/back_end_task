@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+
 class NewUser extends Authenticatable 
 {
-    use HasRoles;
+    use HasRoles ;
 
     public $guard_name = 'api';
 

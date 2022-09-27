@@ -140,4 +140,18 @@ class AuthController extends Controller
     }
 
 
+
+    function logout(Request $request)
+    {
+        $project = NewUser::where('api_token' , $request->api_token)->update([
+
+            'api_token' => Str::random(60)
+        ]);
+        
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ],200);
+    }
+
+
 }
