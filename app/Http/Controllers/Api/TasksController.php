@@ -11,52 +11,154 @@ class TasksController extends Controller
 {
     function create(Request $request)
     {
-        $task = Task::create([
-            'project_id' => $request->project_id ,
-            'name' => $request->name , 
-            'user_id' => $request->employee_id ,
-            'details' => $request->details
+
+        $validator = validator()->make($request->all() , [
+
+            'name' => 'required',
+            'details' => 'required',
+            'employee_id' => 'required' , 
+            'project_id' => 'required'
+            
         ]);
-        return $task;
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $task = Task::create([
+                'project_id' => $request->project_id ,
+                'name' => $request->name , 
+                'user_id' => $request->employee_id ,
+                'details' => $request->details
+            ]);
+            return json_response(1 , 'success' , $task);
+        }  
 
     }
+
+
+
+
+
+
 
     function view(Request $request)
     {
 
-        $task = Task::find($request->task_id);
-        return $task;
+        $validator = validator()->make($request->all() , [
+
+            'task_id' => 'required',
+            
+        ]);
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $task = Task::find($request->task_id);
+            return json_response(1 , 'success' , $task);
+        }
+   
     }
+
+
+
+
+
+
 
     function update(Request $request)
     {
 
-        $task = Task::where('id' , $request->task_id)->update([
+        $validator = validator()->make($request->all() , [
 
-            'name' => $request->name
+            'task_id' => 'required',
+            
         ]);
-        return $task;
+
+        if ($validator->fails()) 
+        { 
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $task = Task::where('id' , $request->task_id)->update([
+
+                'name' => $request->name
+            ]);
+            return json_response(1 , 'success' , $task);
+        }
+
+        
     }
+
+
+
+
+
+
 
     function delete(Request $request)
     {
 
-        $task = Project::find($request->task_id);
- 
-        $task->delete();
+        $validator = validator()->make($request->all() , [
 
-        return "task deleted successfully";
+            'task_id' => 'required',
+            
+        ]);
+
+        if ($validator->fails()) 
+        { 
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $task = Project::find($request->task_id);
+ 
+            $task->delete();
+
+            return json_response(1 , 'success' , 'Task deleted successfully');
+        }
+
+        
     }
+
+
+
+
+
+
+
 
     function submit(Request $request)
     {
 
-        $tsk = SumittedTasks::find($request->task_id);
+        $validator = validator()->make($request->all() , [
+            
+            'task_id' => 'required',
+            
+        ]);
+
+        if ($validator->fails()) 
+        { 
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $tsk = SumittedTasks::find($request->task_id);
         if ($tsk) {
             
             if ($tsk->user_id == auth()->guard('api')->user()->id) {
                 
-                return "you can not resubmit this task";
+                return json_response(0 , 'failed' , 'you can not resubmit this task');
             }
             else {
                 $submitted_task = SumittedTasks::update([
@@ -64,7 +166,7 @@ class TasksController extends Controller
                     'user_id' =>  auth()->guard('api')->user()->id ,
                 ]);
 
-                return $submitted_task;
+                return json_response(1 , 'success' , $submitted_task);
             }
         }
         else {
@@ -73,10 +175,14 @@ class TasksController extends Controller
                 'task_id' => $request->task_id ,
                 'user_id' =>  auth()->guard('api')->user()->id ,
             ]);
-            return $submitted_task;
+            return json_response(1 , 'success' , $submitted_task);
             
 
         }
+        }
+
+
+        
 
         
 

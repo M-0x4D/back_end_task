@@ -10,40 +10,107 @@ class ProjectsController extends Controller
 {
     function create(Request $request)
     {
-        $project = Project::create([
-            'name' => $request->name , 
-            'user_id' => auth()->guard('api')->user()->id ,
-            'details' => $request->details
+
+        $validator = validator()->make($request->all() , [
+
+            'name' => 'required',
+            'details' => 'required',
+            
         ]);
-        return $project;
-        
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $project = Project::create([
+                'name' => $request->name , 
+                'user_id' => auth()->guard('api')->user()->id ,
+                'details' => $request->details
+            ]);
+            return json_response(1 , 'success' , $project);
+        }
 
     }
 
     function view(Request $request)
     {
-        $project = Project::find($request->project_id);
-        return $project;
+
+        $validator = validator()->make($request->all() , [
+
+            'project_id' => 'required',
+            
+        ]);
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $project = Project::find($request->project_id);
+            return json_response(1 , 'success' , $project);
+        }
+        
+        
 
     }
 
     function update(Request $request)
     {
-       
-        $project = Project::where('id' , $request->project_id)->update([
 
-            'name' => $request->name
+        $validator = validator()->make($request->all() , [
+
+            'project_id' => 'required',
+            
         ]);
-        return $project;
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $project = Project::where('id' , $request->project_id)->update([
+
+                'name' => $request->name
+            ]);
+            return json_response(1 , 'success' , $project);
+        }
+       
+        
 
     }
 
     function delete(Request $request)
     {
 
-        $project = Project::find($request->project_id);
+        $validator = validator()->make($request->all() , [
+
+            'project_id' => 'required',
+            
+        ]);
+
+
+        if ($validator->fails()) 
+        {
+            
+             return json_response(0 , 'failed' , 'validation error');
+        }
+        else {
+            
+            $project = Project::find($request->project_id);
  
         $project->delete();
-        return "project deleted successfully";
+        return json_response(1 , 'success' ,'project deleted successfully');
+        }
+        
     }
 }

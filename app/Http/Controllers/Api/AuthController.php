@@ -27,7 +27,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             # code...
-             return response()->json("validation error");
+             return json_response(0 , 'failed' , 'validation error');
         }
 
         else {
@@ -41,11 +41,9 @@ class AuthController extends Controller
                 'api_token' => $api_token
             ];
             $user = NewUser::create($credentials);
-            
-           // $user->user_role()->attach(2 , ['model_type' => 'employee' , 'model_id' => $user->id]);
-           $user->assignRole('employee');
+            $user->assignRole('employee');
             $user->save();
-            return $user;
+            return json_response(1 , 'success' , $user);
                 
             }
 
@@ -65,7 +63,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             # code...
-             return response()->json("validation error");
+             return json_response(0 , 'failed' , 'validation error');
         }
 
         else {
@@ -79,11 +77,9 @@ class AuthController extends Controller
                 'api_token' => $api_token
             ];
             $user = NewUser::create($credentials);
-            
-            //$user->user_role()->attach(3 , ['model_type' => 'supervisor' , 'model_id' => $user->id]);
-           $user->assignRole('supervisor');
+            $user->assignRole('supervisor');
             $user->save();
-            return $user;
+            return json_response(1 , 'success' , $user);
 
             }
     }
@@ -108,7 +104,7 @@ class AuthController extends Controller
         if ($validator->fails()) 
         {
             
-             return response()->json(['msg'=>"validation error"]);
+             return json_response(0 , 'failed' , 'validation error');
         }
 
         else 
@@ -120,19 +116,19 @@ class AuthController extends Controller
             {
                 if(Hash::check($request->password , $user->password))
                 {
-                    return response()->json(['api_token' => $user->api_token , 'user'=>$user]);
+                    return json_response(1 , 'success' , ['api_token' => $user->api_token , 'user'=>$user]);
 
                 }
                 else
                 {
-                    return response()->json(['msg' => 'failed1']);
+                    return json_response(0 , 'failed' , 'wrong password');
                 }
             
             
             }
             else
             {
-                return response()->json(['msg' => 'failed2']);
+                return json_response(0 , 'failed' , 'wrong email or the user does not exist ');
             }
            
 
@@ -149,9 +145,7 @@ class AuthController extends Controller
             'api_token' => Str::random(60)
         ]);
         
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ],200);
+        return json_response(1 , 'success' , 'Successfully logged out');
     }
 
 
