@@ -9,9 +9,10 @@ use App\models\SumittedTasks;
 
 class TasksController extends Controller
 {
+
+    // create new task by supervisor only and assign specific employees for it by << employee_id >>
     function create(Request $request)
     {
-
         $validator = validator()->make($request->all() , [
 
             'name' => 'required',
@@ -23,8 +24,7 @@ class TasksController extends Controller
 
 
         if ($validator->fails()) 
-        {
-            
+        {      
              return json_response(0 , 'failed' , 'validation error');
         }
         else {
@@ -45,7 +45,7 @@ class TasksController extends Controller
 
 
 
-
+    // view task by two users << employee and supervisor >>
     function view(Request $request)
     {
 
@@ -74,7 +74,7 @@ class TasksController extends Controller
 
 
 
-
+    // update task data by supervisor only
     function update(Request $request)
     {
 
@@ -105,7 +105,7 @@ class TasksController extends Controller
 
 
 
-
+    // delete task by supervisor only
     function delete(Request $request)
     {
 
@@ -137,7 +137,7 @@ class TasksController extends Controller
 
 
 
-
+    // submit task by employee only and can't resubmit the same task again
     function submit(Request $request)
     {
 
@@ -176,16 +176,11 @@ class TasksController extends Controller
                 'user_id' =>  auth()->guard('api')->user()->id ,
             ]);
             return json_response(1 , 'success' , $submitted_task);
-            
-
         }
-        }
-
-
-        
-
-        
-
+        }  
     }
+    
+
+
     
 }
